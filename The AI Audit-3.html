@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The AI Audit</title>
+<style>
+:root{--bg:#F5F6FA;--card:#FFFFFF;--line:#E1E4EE;--ink:#1B2540;--mute:#5E6678;--teal:#2F7471;--blue:#44649A;--gold:#D4AE5A;--red:#B4443C;--shadow:rgba(27,37,64,.18);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12172A;--card:#1C2440;--line:#2E3858;--ink:#EEF0F7;--mute:#A4ADC4;--teal:#5FB3AE;--blue:#8FA9DB;--gold:#E2BF6E;--red:#E48078;--shadow:rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12172A;--card:#1C2440;--line:#2E3858;--ink:#EEF0F7;--mute:#A4ADC4;--teal:#5FB3AE;--blue:#8FA9DB;--gold:#E2BF6E;--red:#E48078;--shadow:rgba(0,0,0,.5);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.45}
+main{max-width:1020px;margin:0 auto;padding:28px 20px 60px}
+.kick{font-size:13px;font-weight:700;letter-spacing:1px;color:var(--teal);margin:0}
+h1{font-size:clamp(32px,6vw,52px);margin:6px 0 4px;line-height:1.05}
+.rule{width:72px;height:6px;background:var(--gold);margin:12px 0 14px}
+.sub{color:var(--mute);margin:0 0 22px;font-size:17px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+button{font:inherit;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:10px 16px;font-weight:700}
+button:hover{border-color:var(--teal)}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hp{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hp b{font-size:15px}
+.bar{flex:1;min-width:160px;height:16px;border-radius:10px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .5s}
+.card{background:var(--card);border:2px solid var(--line);border-left:10px solid var(--blue);border-radius:22px;padding:18px 22px;margin-bottom:16px;box-shadow:0 6px 12px var(--shadow)}
+.card:nth-child(even){border-left-color:var(--teal)}
+.card h3{margin:0 0 4px;font-size:20px}
+.sting{font-size:14px;color:var(--mute);margin:0 0 10px}
+.say{margin:10px 0;padding:12px 16px;border-radius:14px;background:rgba(180,68,60,.12);border:2px dashed var(--red)}
+.win{margin:10px 0;padding:12px 16px;border-radius:14px;background:rgba(47,116,113,.14);border:2px solid var(--teal)}
+.say p,.win p{margin:0}
+.lab{font-size:12px;font-weight:700;letter-spacing:1px;margin:0 0 4px!important}
+.say .lab{color:var(--red)}.win .lab{color:var(--teal)}
+.hide{display:none}
+.final{text-align:center;padding:20px;border-radius:22px;background:var(--ink);color:var(--bg);margin-top:8px}
+.final h2{margin:0 0 6px}.final p{margin:0}
+.portal{text-align:center;margin:10px 0 24px}
+.portal button{font-size:18px;padding:14px 24px;background:var(--gold);color:#1B2540;border-color:var(--gold)}
+.spin{display:inline-block;transition:transform .8s}
+.u{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.u{grid-template-columns:1fr}}
+.u .card{margin:0}
+.u .card.b{border-left-color:var(--gold);background:linear-gradient(160deg,var(--card),rgba(212,174,90,.16))}
+.u ul{margin:6px 0 0;padding-left:20px}
+.u li{margin:4px 0}
+.vote{margin-top:22px}
+.vote .row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.res{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:15px}
+.res .bar{height:14px}
+.res .bar i.g{background:var(--gold)}
+footer{margin-top:26px;color:var(--mute);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<p class="kick">TIMNIT GEBRU CASE · CLASS ACTIVITY</p>
+<h1>The AI Audit</h1>
+<div class="rule"></div>
+<p class="sub">We asked an AI to tear our plan apart. Can it survive? Click each card to find out.</p>
+<section>
+<div class="hp"><b id="score">Attacks survived: 0 / 4</b><div class="bar"><i id="fill"></i></div></div>
+<div id="cards"></div>
+<div id="final" class="final hide"><h2>🎉 Plan survived the audit</h2><p>Every weakness led to a stronger recommendation.</p></div>
+</section>
+
+</main>
+<script>
+var D=[
+["1. Make publication review transparent",3,"An appeal panel paid by Google isn’t truly independent, and published criteria could slow every paper down.","We set fixed decision deadlines and keep the review criteria and the reasons for each decision open to the researcher. Only truly sensitive business details (like unreleased product data) can be withheld, and the reason for withholding must be stated. At least one panel member is external."],
+["2. Protect researchers who speak up",4,"An ombudsperson Google pays can’t be neutral, and a channel with no enforcement is just a suggestion box.","The ombudsperson sits outside Research leadership, shares anonymized summaries every quarter, and anti-retaliation rules are written into policy with consequences."],
+["3. Hold leaders accountable for gaps",4,"A report doesn’t force anyone to act. Leaders could read it, do nothing, and still look fine. The case also only mentions a plan to link pay to diversity goals, not proof that it works.","Leaders must pick an action and report back next quarter, follow-through goes into performance reviews, and someone outside the team spot-checks the data."],
+["4. Verify resignations before processing",2,"Extra HR checks add bureaucracy and could trap someone who really did want to leave.","The check is a short written confirmation, not an investigation. If the employee confirms, it is processed right away."]];
+var n=0,c=document.getElementById("cards"),h="";
+D.forEach(function(d,i){var f="";for(var k=0;k<5;k++)f+=k<d[1]?"🔥":"▫️";
+h+='<div class="card"><h3>'+d[0]+'</h3><p class="sting">Sting level: '+f+'</p><button id="a'+i+'" onclick="atk('+i+')">🤖 Reveal the AI’s attack</button><div id="s'+i+'" class="say hide"><p class="lab">THE AI SAYS</p><p>“'+d[2]+'”</p><button style="margin-top:10px" id="b'+i+'" onclick="def('+i+')">🛡️ Our comeback</button></div><div id="w'+i+'" class="win hide"><p class="lab">OUR RESPONSE</p><p>'+d[3]+'</p></div></div>';});
+c.innerHTML=h;
+function g(i){return document.getElementById(i)}
+function atk(i){g("a"+i).classList.add("hide");g("s"+i).classList.remove("hide")}
+function def(i){if(!g("w"+i).classList.contains("hide"))return;g("b"+i).classList.add("hide");g("w"+i).classList.remove("hide");n++;g("score").textContent="Attacks survived: "+n+" / 4";g("fill").style.width=(n*25)+"%";if(n==4)g("final").classList.remove("hide")}
+</script>
+</body>
+</html>
